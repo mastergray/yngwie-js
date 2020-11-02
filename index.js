@@ -167,7 +167,7 @@ Yngwie.Listener = (evtName, fn, options) => ({
    return yngwie.init(parent)
  }, node);
 
- // declare :: {METHOD_ID:(*) -> ElemFold|ElemFold.Text} -> [ElemFold|ElemFold.Text] -> OF
+ // declare :: {METHOD_ID:(*) -> YNGWIE|TEXT} -> [YNGWIE|TEXT] -> DECLERATION
  // Creates a "declaration" for "mapping" convience methods used to create HTML elements:
  Yngwie.declare = (mapping) => (yngwies) => Object.keys(mapping).reduce((result, methodName) => {
    yngwies = yngwies || [];
