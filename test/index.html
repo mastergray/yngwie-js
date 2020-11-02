@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Yngwie Test</title>
+  <style>
+    .header {
+      padding:5px;
+      border:1px solid #000;
+      cursor:pointer;
+    }
+  </style>
+  <script src="../index.js"></script>
+</head>
+<body>
+  <script>
+    let page = Yngwie.init(document.querySelector("body"), [
+      Yngwie("div", {"class":"header"}, [
+        Yngwie.Text("Hello World!")
+      ], [
+        Yngwie.Listener("click", function (evt) {
+          alert("You did it, bro");
+        })
+      ]),
+      Yngwie("input", {"type":"button", "value":"Press It"})
+        .on("click", function (evt) {
+          console.log("You sly devil...")
+        })
+        .on("click", function (evt) {
+          alert("nothing to see here!")
+        })
+        .attachment("prepend")
+    ])
+
+    declare = Yngwie.declare({
+      "button":(value, fn, attribs) => Yngwie("input")
+        .attribs(Object.assign(attribs||{},{"type":"button","value":value}))
+        .on("click", fn),
+      "select":(name, items, onChange) => Yngwie("select")
+        .attribs({"name":name})
+        .children(items)
+        .on("change", onChange),
+      "option":(value, label) => Yngwie("option")
+          .attribs({"value":value})
+          .children([Yngwie.Text(label)])
+    })
+
+    let OPTIONS = declare()
+      .option("0", "A")
+      .option("1", "B")
+      .option("2", "C")
+
+    let SELECT = declare()
+      .select("my_select", [
+        OPTIONS
+      ], function (evt) {
+        console.log(this.children[this.selectedIndex].innerHTML);
+      })
+
+    SELECT
+      .button("test", function (evt) {
+        alert('another test?')
+      })
+      .init(page)
+
+
+
+
+  </script>
+</body>
+</html>
