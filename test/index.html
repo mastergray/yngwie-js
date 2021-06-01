@@ -4,68 +4,52 @@
   <meta charset="utf-8">
   <title>Yngwie Test</title>
   <style>
-    .header {
-      padding:5px;
-      border:1px solid #000;
+    body {
+      background:#000;
+    }
+
+    h1, h2 {
+      color:#fff;
+    }
+
+    .container {
       cursor:pointer;
     }
+
   </style>
-  <script src="../index.js"></script>
 </head>
 <body>
+  <div id="myTest" a="1" b="2" c="3">
+    <header class="container">
+      <h1>no hello World!</h1>
+    </header>
+  </div>
+  <div id="myTest2"></div>
+  <script src="./yngwie.js"></script>
   <script>
-    let page = Yngwie.init(document.querySelector("body"), [
-      Yngwie("div", {"class":"header"}, [
-        Yngwie.Text("Hello World!")
-      ], [
-        Yngwie.Listener("click", function (evt) {
-          alert("You did it, bro");
-        })
-      ]),
-      Yngwie("input", {"type":"button", "value":"Press It"})
-        .on("click", function (evt) {
-          console.log("You sly devil...")
-        })
-        .on("click", function (evt) {
-          alert("nothing to see here!")
-        })
-        .attachment("prepend")
-    ])
-
-    declare = Yngwie.declare({
-      "button":(value, fn, attribs) => Yngwie("input")
-        .attribs(Object.assign(attribs||{},{"type":"button","value":value}))
-        .on("click", fn),
-      "select":(name, items, onChange) => Yngwie("select")
-        .attribs({"name":name})
-        .children(items)
-        .on("change", onChange),
-      "option":(value, label) => Yngwie("option")
-          .attribs({"value":value})
-          .children([Yngwie.Text(label)])
+    // Worse testing ever :
+    myTest = document.querySelector("#myTest");
+    a = Yngwie.Node.init("a");
+    b = Yngwie.Node.init("b");
+    c = Yngwie.Node.init("c");
+    d = Yngwie.Node.init("d");
+    cloneA = a.append(b).append(c).append(d).clone();
+    b.detach();
+    b.append(c);
+    //console.log(cloneA, a,b);
+    myTest2 = Yngwie.transform(myTest);
+    console.log(myTest2)
+    h1 = myTest2.getElementsByTagName("h1");
+    myTest2.parse((result, node) => {
+      console.log(node)
     })
-
-    let OPTIONS = declare()
-      .option("0", "A")
-      .option("1", "B")
-      .option("2", "C")
-
-    let SELECT = declare()
-      .select("my_select", [
-        OPTIONS
-      ], function (evt) {
-        console.log(this.children[this.selectedIndex].innerHTML);
-      })
-
-    SELECT
-      .button("test", function (evt) {
-        alert('another test?')
-      })
-      .init(page)
-
-
-
-
+    message = Yngwie.Element.init("h2")
+      .text("Okay, this is a message")
+      .on("click", (evt) => {
+        alert("hey, it worked")
+      });
+    myTest2HTML = myTest2.append(message).render()
+    //console.log(myTest2HTML);
+    myTest.append(myTest2HTML)
   </script>
 </body>
-</html>
