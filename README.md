@@ -60,7 +60,7 @@ Virtual Text Node
 Binds event handlers for a specific event to an instance of YngwieElement 
 
 ## Yngwie.transform (YngwieTransform)
-Method for transforming a STRING of HTML or a DOMElement into an YngwieElement instance a STRING stored as it's value 
+Method for transforming a STRING of HTML or a DOM [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) into an instance of YngwieElement.
 
 
 
