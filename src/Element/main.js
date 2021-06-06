@@ -178,7 +178,8 @@ export default class YngwieElement extends YngwieNode {
    *
    */
 
-  // Static factory method:
+	// :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
+  // static factory method:
   static init(tagname, attribs, text, controllers) {
     return new YngwieElement(tagname, attribs, text, controllers)
   }
