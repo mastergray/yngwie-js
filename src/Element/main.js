@@ -1,22 +1,27 @@
 import YngwieNode from "../Node/main.js";
 import YngwieController from "../Controller/main.js";
+import YngwieError from "../Error/main.js";
 
 export default class YngwieElement extends YngwieNode {
 
-  // :: STRING. OBJECT, STRING, [yngwieController] -> this
-  // CONSTRUCTOR
+  // CONSTRUCTOR :: STRING. OBJECT, STRING, [yngwieController] -> this
   constructor(tagname, attribs, text, controllers) {
     super(tagname);
-    this._attribs = attribs || {};  // Element Attributes
-    this._text = text;              // Element text that's appended as first child of this element
-    this._controllers = [];         // Controllers bound to this element
+    this._attribs = attribs || {};                   // Element Attributes
+    this._text = text === undefined ? null : text;   // Element text that's appended as first child of this element
+    this._controllers = [];                          // Controllers bound to this element
   }
 
-  // :: OBJECT -> this
+  // :: OBJECT|UNDEFINED -> this|OBJECT
   // Sets "attribs" OBJECT with given OBJECT:
+  // NOTE: If no argument is given, set attributes are returned:
   attribs(attribs) {
-    this._attribs = attribs;
-    return this;
+    if (attribs === undefined) {
+      return this._attribs;
+    } else {
+      this._attribs = attribs;
+      return this;
+    }
   }
 
   // :: STRING -> BOOLEAN
@@ -38,29 +43,35 @@ export default class YngwieElement extends YngwieNode {
     return this;
   }
 
-  // :: STRING -> this
+  // :: STRING|UNDEFINED -> this|UNDEFINED
   // Appends text node as first child of element at render with given string as it's value:
+  // NOTE: If no argument is given, set text is returned:
+  // NOTE: To unset next, set set to NULL:
   text(str) {
-    this._text = str;
-    return this;
+    if (str === undefined) {
+      return this._text;
+    } else {
+      this._text = str;
+      return this;
+    }
   }
 
   // :: STRING -> [yngwieElement]
-	// Returns an array of YngwieElemnts that have the given tagname:
-	// NOTE: Returns an empty array if no elements are found with the given tag name:
-	getElementsByTagName(tagname) {
+  // Returns an array of YngwieElemnts that have the given tagname:
+  // NOTE: Returns an empty array if no elements are found with the given tag name:
+  getElementsByTagName(tagname) {
     return this.parse((result, node) => {
       if (node._value === tagname) {
         result.push(node);
       }
-      return result;
+    return result;
     }, []);
-	}
+  }
 
-	// STRING, STRING|UNDEFINED -> [yngwieElement]
-	// Returns an array of yngwieElements that have the given attribute with the given value:
-	// NOTE: If no value is given, then any element that has the given attribute name is returned
-	getElementsByAttribute(name, value) {
+  // STRING, STRING|UNDEFINED -> [yngwieElement]
+  // Returns an array of yngwieElements that have the given attribute with the given value:
+  // NOTE: If no value is given, then any element that has the given attribute name is returned
+  getElementsByAttribute(name, value) {
     return this.parse((node, result) => {
       if (node instanceof YngwieElement) {
         if (node.hasAttribute(name)) {
@@ -75,7 +86,7 @@ export default class YngwieElement extends YngwieNode {
       }
       return result;
     }, []);
-	}
+  }
 
   // STRING -> [yngwieElement]
   // Returns all elements that have the given class name
@@ -101,30 +112,33 @@ export default class YngwieElement extends YngwieNode {
   // VOID -> yngwieElement
   // Returns clone of this yngwieElement:
   clone() {
-    let tagname = (' ' + this._value).slice(1);
+
+    // Copy tagname:
+    let tagname = `${this._value}`;
+
+    // Copy attributes:
     let attribs = Object.keys(this._attribs).reduce((result, id) => {
-      result[id] = (' ' + this._attribs[id]).slice(1);
+      result[id] = `${this._attribs[id]}`;
       return result;
     }, {});
+
+    // Copy set:
     let text = this._text !== undefined
-      ? (' ' + this._text).slice(1)
+      ? `${this._text}`
       : undefined;
+
+    // Copy controllers:
     let controllers = this._controllers.map((controller) => {
       return controller.clone();
     });
-    let elem = YngwieElement(tagname, attribs, text, controllers);
+
+    // Copy children and return element:
+    let elem = new YngwieElement(tagname, attribs, text, controllers);
     return this.children().reduce((elem, child) => {
       child = child.clone();
       return elem.append(child);
     }, elem);
-  }
 
-  // :: [yngwieElement] -> this
-  // Appends an array of YngwieElements to this instance:
-  appends(elems) {
-    return elems.reduce((result, elem) => {
-      return this.append(elem);
-    }, this);
   }
 
   // :: STRING|DOMElement -> DOMElement
@@ -178,7 +192,7 @@ export default class YngwieElement extends YngwieNode {
    *
    */
 
-	// :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
+  // :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
   // static factory method:
   static init(tagname, attribs, text, controllers) {
     return new YngwieElement(tagname, attribs, text, controllers)
@@ -192,9 +206,26 @@ export default class YngwieElement extends YngwieNode {
       ? document.querySelector(target)
       : target;
     return elems.reduce((result, elem) => {
-      elem.render(result);
-      return result;
-    }, node)
+      if (elem instanceof YngwieElement) {
+        elem.render(result);
+        return result;
+      }
+      throw new YngwieError("Only YngwieElement can be rendered to target", elem);
+    }, node);
+  }
+
+  // :: STRING|DOMElement, yngwieElement -> DOMElement
+  // Replaces the given target with the render of the given instance  of YngwieElement:
+  static inject(target, elem) {
+    if (elem instanceof YngwieElement) {
+      let node = typeof(target) === "string"
+        ? document.querySelector(target)
+        : target;
+      let result = elem.render();
+      node.replaceWith(result);
+      return node;
+    }
+    throw new YngwieError("Only YngwieElement can be injected into target", elem);
   }
 
 }

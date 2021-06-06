@@ -72,8 +72,9 @@
 <script>
 
   // Creates HEADER element with set text:
-  let header = (text) => Yngwie.Element.init("HEADER")
-    .text(text)
+  let header = (text) => text === undefined
+    ? Yngwie.Element.init("HEADER")
+    : Yngwie.Element.init("HEADER").text(text);
 
   // Create A link element with set text and URL:
   let link = (text, URL) => Yngwie.Element.init("A")
@@ -100,39 +101,42 @@
   let footer = (text) => Yngwie.Element.init("FOOTER")
     .append(Yngwie.Element.init("SECTION").text(text));
 
-  // Initialize UI and append it to BODY element:
-  Yngwie.Element.renderTo("body", [
-    header().appends([
-      Yngwie.Element.init("h1").text("My Articles"),
-      nav([
-        link("Link 1"),
-        link("Link 2"),
-        link("Link 3"),
-        link("Link 4")
-      ])
-    ]),
-    pageContent().appends([
-      article("Article 1", `
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Donec bibendum augue in sagittis sodales. Mauris vel lacinia ante.
-        Vivamus suscipit metus id eros faucibus, auctor tincidunt dui bibendum.
-        Vivamus et purus ex. Nam aliquam bibendum lectus interdum aliquam. Vivamus molestie
-        sit amet nisl sed blandit. Praesent viverra eros nec ligula volutpat, et efficitur metus facilisis.
-      `),
-      article("Article 2", `Mauris sit amet dui commodo, convallis velit vitae,
-      malesuada leo. Cras lacinia metus at dapibus molestie. Sed vel metus nec diam
-      feugiat dignissim at in lorem. Aenean sit amet scelerisque diam. Nulla rhoncus,
-      nulla id mollis vestibulum, nulla est convallis mauris, vel ullamcorper
-      elit sapien sollicitudin enim. Nam elementum elementum justo, a imperdiet quam
-      commodo ut. Vivamus scelerisque libero a odio maximus vestibulum. Orci varius
-      natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      Nullam vulputate nec urna non molestie. Fusce eu ligula congue nisl
-      sollicitudin semper non nec nibh. Mauris placerat ipsum sed odio fringilla porttitor.
-      Morbi sed vehicula ex, a auctor nibh.`)
-    ]),
-    footer("[footer]")
-  ])
-
+  try {
+    // Initialize UI and append it to BODY element:
+    Yngwie.Element.renderTo("body", [
+      header().appends([
+        Yngwie.Element.init("h1").text("My Articles"),
+        nav([
+          link("Link 1"),
+          link("Link 2"),
+          link("Link 3"),
+          link("Link 4")
+        ])
+      ]),
+      pageContent().appends([
+        article("Article 1", `
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Donec bibendum augue in sagittis sodales. Mauris vel lacinia ante.
+          Vivamus suscipit metus id eros faucibus, auctor tincidunt dui bibendum.
+          Vivamus et purus ex. Nam aliquam bibendum lectus interdum aliquam. Vivamus molestie
+          sit amet nisl sed blandit. Praesent viverra eros nec ligula volutpat, et efficitur metus facilisis.
+        `),
+        article("Article 2", `Mauris sit amet dui commodo, convallis velit vitae,
+          malesuada leo. Cras lacinia metus at dapibus molestie. Sed vel metus nec diam
+          feugiat dignissim at in lorem. Aenean sit amet scelerisque diam. Nulla rhoncus,
+          nulla id mollis vestibulum, nulla est convallis mauris, vel ullamcorper
+          elit sapien sollicitudin enim. Nam elementum elementum justo, a imperdiet quam
+          commodo ut. Vivamus scelerisque libero a odio maximus vestibulum. Orci varius
+          natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+          Nullam vulputate nec urna non molestie. Fusce eu ligula congue nisl
+          sollicitudin semper non nec nibh. Mauris placerat ipsum sed odio fringilla porttitor.
+          Morbi sed vehicula ex, a auctor nibh.`)
+      ]),
+      footer("[footer]")
+    ]);
+  } catch (err) {
+    err.log();
+  }
 
 </script>
 

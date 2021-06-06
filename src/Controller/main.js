@@ -1,7 +1,6 @@
 export default class YngwieController {
 
-  // :: STRING, [(EVT -> VOID)] -> this
-  // CONSTRUCTOR
+  // CONSTRUCTOR :: STRING, [(EVT -> VOID)] -> this
   constructor(evtName, fns) {
     this._evtName = evtName;
     this._fns = fns || [];
@@ -17,7 +16,7 @@ export default class YngwieController {
   // :: VOID -> yngwieController
   // Creates clone of this yngwieController:
   clone() {
-    let evtName = (' ' + this._evtName).slice(1);
+    let evtName = `${this._evtName}`;
     let fns = this._fns.map(fn=>{
       return fn.toString();
     });

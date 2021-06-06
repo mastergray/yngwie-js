@@ -1,7 +1,8 @@
+import YngwieError from "../Error/main.js";
+
 export default class YngwieNode {
 
-  // STRING -> yngwieNode
-  // CONSTRUCTOR
+  // CONSTRUCTOR :: STRING -> yngwieNode
   constructor(value) {
     this._value = value;       // Arbitrary STRING value that can be stored by this node
     this._parent = undefined;  // Parent of this node
@@ -56,13 +57,21 @@ export default class YngwieNode {
       // Set parent
       node._parent = this;
 
-      // Return instance:
+      // Return instance:cosnole
       return this;
 
     }
 
-    throw new Error("Can only apppend YngwieNode to other YngwieNodes");
+    throw new YngwieError("Can only apppend YngwieNode to other YngwieNodes", node);
 
+  }
+
+  // :: [yngwieNode] -> this
+  // Appends an array of YngwieNodes to this instance:
+  appends(nodes) {
+    return nodes.reduce((result, node) => {
+      return this.append(node);
+    }, this);
   }
 
   // :: VOID -> this
@@ -119,7 +128,7 @@ export default class YngwieNode {
 
     }
 
-    throw new Error("Can only insert a YngwieNode before other YngwieNodes");
+    throw new YngwieError("Can only insert a YngwieNode before other YngwieNodes", node);
 
   }
 
@@ -138,14 +147,14 @@ export default class YngwieNode {
 
     }
 
-    throw new Error("Can only replace a YngwieNode with another YngwieNode");
+    throw new YngwieError("Can only replace a YngwieNode with another YngwieNode", node);
 
   }
 
   // :: VOID -> yngwieNode
   // Returns deep clone of this node:
   clone() {
-    let value =  (' ' + this._value).slice(1);
+    let value = `${this._value}`;
     let clone = new YngwieNode(value)
     return this.children().reduce((result, child) => {
       clone = child.clone();
@@ -201,7 +210,7 @@ export default class YngwieNode {
 
     } else {
 
-      throw new Error("Can only parse a YngwieNode");
+      throw new YngwieError("Can only parse a YngwieNode", node);
 
     }
 

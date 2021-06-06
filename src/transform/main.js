@@ -16,8 +16,8 @@ function toNode(html) {
   return doc.body.firstElementChild;
 }
 
-// :: NODE, NOD, node.nodeTypE -> VOID
-// Creates an YngwieElement from the given node and all of it's desendents:
+// :: NODE, NODE, node.nodeType -> VOID
+// Creates an instance of YngwieElement from the given node and all of it's desendents:
 // NOTE: Inspired by Crockford's DOM walking algorithm from "Javascript:The Good Parts"
 function walkNode(node, result) {
 
