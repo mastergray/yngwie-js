@@ -46,7 +46,7 @@ export default class YngwieElement extends YngwieNode {
   // :: STRING|UNDEFINED -> this|UNDEFINED
   // Appends text node as first child of element at render with given string as it's value:
   // NOTE: If no argument is given, set text is returned:
-  // NOTE: To unset next, set set to NULL:
+  // NOTE: To unset next, set to NULL:
   text(str) {
     if (str === undefined) {
       return this._text;

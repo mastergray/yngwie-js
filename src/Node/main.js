@@ -69,9 +69,12 @@ export default class YngwieNode {
   // :: [yngwieNode] -> this
   // Appends an array of YngwieNodes to this instance:
   appends(nodes) {
-    return nodes.reduce((result, node) => {
-      return this.append(node);
-    }, this);
+    if (nodes instanceof Array) {
+      return nodes.reduce((result, node) => {
+        return this.append(node);
+      }, this);
+    }
+    throw new YngwieError("Expected array as arguemnt", nodes);
   }
 
   // :: VOID -> this
@@ -111,6 +114,12 @@ export default class YngwieNode {
     // Checks if argument is a node:
     if (node instanceof YngwieNode) {
 
+      // Set relations
+      node._prev = this._prev;
+      node._next = this;
+      node._parent = this._parent;
+
+      // Set previous sibling relations:
       if (this._prev) {
         this._prev._next = node;
       } else {
@@ -119,10 +128,8 @@ export default class YngwieNode {
         }
       }
 
-      // Set relations
-      node._prev = this._prev;
-      node._next = this;
-      node._parent = this._parent;
+      // Set previous sibling:
+      this._prev = node;
 
       return this;
 
@@ -139,11 +146,19 @@ export default class YngwieNode {
     // Checks if argument is a node:
     if (node instanceof YngwieNode) {
 
-      this.insertBefore(node);
-      this.detach();
+      // Checks if this node has a parent
+      if (this._parent !== undefined) {
 
-      // Return given node:
-      return node;
+        // Replacement is accomplished by first inserting given node, then detatching this node:
+        this.insertBefore(node);
+        this.detach();
+
+        // Return given node:
+        return node;
+
+      }
+
+      throw new YngwieError("Can only replace YngwieNode if YngwieNode being replaced has parent", this);
 
     }
 
