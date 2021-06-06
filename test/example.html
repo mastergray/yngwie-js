@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Yngwie Test</title>
+  <style>
+
+    body {
+      font-family:sans-serif;
+      padding:0px;
+      margin:0px;
+      background:#ccc;
+    }
+
+    header {
+      border-bottom:1px solid #000;
+      background:#000;
+      margin:0px;
+      padding:0px;
+    }
+
+    .banner-view h1 {
+      color:#fff;
+      margin:0px;
+      padding:0px;
+    }
+
+    .banner-view {
+      padding:20px;
+    }
+
+
+    .nav-view {
+      background:#666;
+      padding:10px;
+      border-bottom:4px solid #333;
+    }
+
+    .nav-view a {
+      color:#FFF;
+      text-decoration:none;
+      border-right:1px solid #FFF;
+      padding-right:5px;
+      margin-left:5px;
+    }
+
+    main {
+      padding:20px;
+    }
+
+    footer {
+      background:#333;
+      color:#fff;
+      position: absolute;
+      bottom:0px;
+      width:100%;
+      border-top:4px solid #000;
+    }
+
+    footer section {
+      padding:15px;
+    }
+
+    main section header {
+      padding:10px;
+      background:#000;
+      color:#fff;
+      font-weight:bold;
+      border-bottom:2px solid:#666;
+    }
+
+    main section {
+      box-shadow:1px 1px 1px solid #000;
+      margin:10px;
+      border:1px solid #000;
+      background:#fff;
+    }
+
+    main section article {
+      font-weight:200;
+      padding:5px;
+    }
+
+    main section article ul {
+      padding:0px;
+      margin:0px;
+      list-style-type: none;
+    }
+
+    main section article li {
+      border-bottom:1px solid #000;
+      padding:4px;
+    }
+
+    main section article li:last-child {
+      border-bottom:0px;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="page" id="my-page">
+    <header>
+      <section class="banner-view">
+        <h1>[Banner]</h1>
+      </section>
+      <section class="nav-view">
+        <nav>
+          <a href="" data-link="a">Link A</a>
+          <a href="" data-link="b">Link B</a>
+          <a href="" data-link="c">Link C</a>
+          <a href="" data-link="c">Link D</a>
+        </nav>
+      </section>
+    </header>
+    <main>
+      <section>
+        <header>Article 1</header>
+        <article>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Donec bibendum augue in sagittis sodales. Mauris vel lacinia ante.
+          Vivamus suscipit metus id eros faucibus, auctor tincidunt dui bibendum.
+          Vivamus et purus ex. Nam aliquam bibendum lectus interdum aliquam.
+          Vivamus molestie sit amet nisl sed blandit. Praesent viverra eros nec
+          ligula volutpat, et efficitur metus facilisis
+        </article>
+      </section>
+      <section>
+        <header>Article 2</header>
+        <article>
+          Mauris sit amet dui commodo, convallis velit vitae, malesuada leo.
+          Cras lacinia metus at dapibus molestie. Sed vel metus nec diam
+          feugiat dignissim at in lorem. Aenean sit amet scelerisque diam.
+          Nulla rhoncus, nulla id mollis vestibulum, nulla est convallis mauris,
+          vel ullamcorper elit sapien sollicitudin enim. Nam elementum elementum
+          justo, a imperdiet quam commodo ut. Vivamus scelerisque libero a odio
+          maximus vestibulum. Orci varius natoque penatibus et magnis dis parturient
+           montes, nascetur ridiculus mus. Nullam vulputate nec urna non molestie.
+           Fusce eu ligula congue nisl sollicitudin semper non nec nibh.
+           Mauris placerat ipsum sed odio fringilla porttitor. Morbi sed
+           vehicula ex, a auctor nibh.
+        </article>
+      </section>
+      <section>
+        <header>A List</header>
+        <article>
+          <ul>
+            <li data-list-item="Item 1">Item 1</li>
+            <li data-list-item="Item 2">Item 2</li>
+            <li data-list-item="Item 3">Item 3</li>
+            <li data-list-item="Item 4">Item 4</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+    <footer>
+      <section>[Footer]</section>
+    </footer>
+  </div>
+
+  <script src="./yngwie.js"></script>
+  <script>
+    let myPage = document.querySelector("#my-page");
+    let yngwie = Yngwie.transform(myPage);
+    let items = yngwie.getElementsByAttribute("data-list-item");
+    items.forEach((item) => {
+      item.on("click", function (evt) {
+        alert(item.getAttribute("data-list-item"))
+      })
+    })
+    myPage.replaceWith(yngwie.render());
+    /*let test = yngwie.parse((node, result) => {
+      result.push(node._value);
+      return result;
+    }, []);*/
+    console.log(items);
+  </script>
+</body>

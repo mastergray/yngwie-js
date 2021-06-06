@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <title>[Title]</title>
+ <style>
+
+  body {
+    margin:0px;
+    padding:0px;
+    font-family:sans-serif;
+    background:#eee;
+  }
+
+  header h1 {
+    padding:20px;
+    margin:0px;
+  }
+
+  header {
+    background:#000;
+    color:#fff;
+  }
+
+  nav {
+    background:#666;
+    padding:10px 10px 10px 20px;
+    border-bottom:4px solid #333;
+  }
+
+  nav a {
+    text-decoration:none;
+    color:#fff;
+  }
+
+  nav a:after {
+    content:"|";
+    margin:0px 10px 0px 10px;
+  }
+
+  article {
+    padding:0px;
+    margin:10px;
+    border:1px solid #000;
+    box-shadow:1px 1px 1px #000;
+  }
+
+  article header {
+    padding:10px;
+  }
+
+  article section {
+    padding:10px;
+  }
+
+  footer {
+    position:absolute;
+    bottom:0px;
+    background:#666;
+    color:#fff;
+    width:100%;
+  }
+
+  footer section {
+    padding:10px;
+  }
+
+ </style>
+</head>
+<body>
+<script src="./yngwie.js"></script>
+<script>
+
+  // Creates HEADER element with set text:
+  let header = (text) => Yngwie.Element.init("HEADER")
+    .text(text)
+
+  // Create A link element with set text and URL:
+  let link = (text, URL) => Yngwie.Element.init("A")
+    .attribs({"href":URL||""})
+    .text(text);
+
+  // Create NAV element with given array of "link" elements:
+  let nav = (links) => links.reduce((nav, link) => {
+    return nav.append(link);
+  }, Yngwie.Element.init("NAV"));
+
+  // Create DIv with page-content class:
+  let pageContent = () => Yngwie.Element.init("DIV").attribs({"class":"page-content"})
+
+  // Creates SECTION element with set text:
+  let section = (text) => Yngwie.Element.init("SECTION").text(text);
+
+  // Create article with section text and header:
+  let article = (title, text) => Yngwie.Element.init("ARTICLE").appends([
+    header(title), section(text)
+  ]);
+
+  // Create footer element with text:
+  let footer = (text) => Yngwie.Element.init("FOOTER")
+    .append(Yngwie.Element.init("SECTION").text(text));
+
+  // Initialize UI and append it to BODY element:
+  Yngwie.Element.renderTo("body", [
+    header().appends([
+      Yngwie.Element.init("h1").text("My Articles"),
+      nav([
+        link("Link 1"),
+        link("Link 2"),
+        link("Link 3"),
+        link("Link 4")
+      ])
+    ]),
+    pageContent().appends([
+      article("Article 1", `
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Donec bibendum augue in sagittis sodales. Mauris vel lacinia ante.
+        Vivamus suscipit metus id eros faucibus, auctor tincidunt dui bibendum.
+        Vivamus et purus ex. Nam aliquam bibendum lectus interdum aliquam. Vivamus molestie
+        sit amet nisl sed blandit. Praesent viverra eros nec ligula volutpat, et efficitur metus facilisis.
+      `),
+      article("Article 2", `Mauris sit amet dui commodo, convallis velit vitae,
+      malesuada leo. Cras lacinia metus at dapibus molestie. Sed vel metus nec diam
+      feugiat dignissim at in lorem. Aenean sit amet scelerisque diam. Nulla rhoncus,
+      nulla id mollis vestibulum, nulla est convallis mauris, vel ullamcorper
+      elit sapien sollicitudin enim. Nam elementum elementum justo, a imperdiet quam
+      commodo ut. Vivamus scelerisque libero a odio maximus vestibulum. Orci varius
+      natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+      Nullam vulputate nec urna non molestie. Fusce eu ligula congue nisl
+      sollicitudin semper non nec nibh. Mauris placerat ipsum sed odio fringilla porttitor.
+      Morbi sed vehicula ex, a auctor nibh.`)
+    ]),
+    footer("[footer]")
+  ])
+
+
+</script>
+
+</body>
+</html>

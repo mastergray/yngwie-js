@@ -32,12 +32,6 @@ export default class YngwieTextNode extends YngwieNode {
     return new YngwieTextNode((' ' + this._value).slice(1));
   }
 
-  // :: VOID -> OBJECT
-  // Returns OBJECT of all properties set for this instance:
-  inspect() {
-    return {"type":"text","value":this._text};
-  }
-
   /**
    *
    *  Static Methods

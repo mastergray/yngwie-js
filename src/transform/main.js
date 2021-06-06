@@ -22,7 +22,8 @@ function toNode(html) {
 function walkNode(node, result) {
 
   if (node.nodeType === 1) {
-    let elem = new YngwieElement(node.tagName, getAttributes(node));
+    let attribs = getAttributes(node);
+    let elem = new YngwieElement(node.tagName, attribs);
     result = result === undefined
       ? elem
       : result.append(elem);
@@ -52,7 +53,7 @@ function walkNode(node, result) {
 // :: DOMElement -> OBJECT
 // Returns OBJECT of attributes from the given DOM Element:
 function getAttributes(elem) {
-  return Array.from(elem).reduce((result, attrib) => {
+  return Array.from(elem.attributes).reduce((result, attrib) => {
     result[attrib.name] = attrib.value;
     return result;
   }, {});

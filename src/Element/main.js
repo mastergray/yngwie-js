@@ -61,13 +61,15 @@ export default class YngwieElement extends YngwieNode {
 	// Returns an array of yngwieElements that have the given attribute with the given value:
 	// NOTE: If no value is given, then any element that has the given attribute name is returned
 	getElementsByAttribute(name, value) {
-    return this.parse((result, node) => {
-      if (node.hasAttribute(name)) {
-        if (value === undefined) {
-          result.push(node);
-        } else {
-          if (node.getAttribute(name) === value) {
+    return this.parse((node, result) => {
+      if (node instanceof YngwieElement) {
+        if (node.hasAttribute(name)) {
+          if (value === undefined) {
             result.push(node);
+          } else {
+            if (node.getAttribute(name) === value) {
+              result.push(node);
+            }
           }
         }
       }
@@ -117,9 +119,18 @@ export default class YngwieElement extends YngwieNode {
     }, elem);
   }
 
-  // :: VOID -> DOMElement
+  // :: [yngwieElement] -> this
+  // Appends an array of YngwieElements to this instance:
+  appends(elems) {
+    return elems.reduce((result, elem) => {
+      return this.append(elem);
+    }, this);
+  }
+
+  // :: STRING|DOMElement -> DOMElement
   // Transforms YngwieElement and it's desendants into browser a DOMElement:
-  render() {
+  // NOTE: Optional arugment determines where to append render to, otherwise reender is returned;
+  render(target) {
 
     // Intialize DOMElement:
     let elem = Object.keys(this._attribs).reduce((elem, id) => {
@@ -139,13 +150,27 @@ export default class YngwieElement extends YngwieNode {
     }
 
     // Render and append all children and return result:
-    return this.children().reduce((result, child) => {
+    let result = this.children().reduce((result, child) => {
       child = child.render();
       result.appendChild(child);
       return result;
     }, elem);
 
+    // If target is given, appends result of render to that target:
+    if (target !== undefined) {
+      // If target is string, find node using query selector:
+      if (typeof(target) === "string") {
+        document.querySelector(target).appendChild(result);
+      } else {
+        // Otherise assume that target is DOMElement:
+        target.appendChild(result);
+      }
+    }
+
+    return result;
+
   }
+
 
   /**
    *
@@ -156,6 +181,19 @@ export default class YngwieElement extends YngwieNode {
   // Static factory method:
   static init(tagname, attribs, text, controllers) {
     return new YngwieElement(tagname, attribs, text, controllers)
+  }
+
+  // :: STRING|DOMElement, [yngwieElement] -> DOMElement
+  // Renders an array of yngwieElements and appends result to given target:
+  // NOTE: DOMElement of target is returned
+  static renderTo(target, elems) {
+    let node = typeof(target) === "string"
+      ? document.querySelector(target)
+      : target;
+    return elems.reduce((result, elem) => {
+      elem.render(result);
+      return result;
+    }, node)
   }
 
 }
