@@ -167,12 +167,7 @@
     let asString = toSTRING(myPage);
     let asYngwie = toYNGWIE(asString)
     let textNode = Yngwie.TextNode.init("hello world!");
-    let elem = Yngwie.Element.init("DIV").text("Goodbye world");
-    //console.log(new Yngwie.TextNode("hey"));
-    console.log(toSTRING(textNode));
-    /*let test = yngwie.parse((node, result) => {
-      result.push(node._value);
-      return result;
-    }, []);*/
+    textNode.appends([" ", Yngwie.TextNode.init("Goodbye!")]);
+    console.log(textNode.text());
   </script>
 </body>

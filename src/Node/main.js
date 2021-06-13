@@ -207,7 +207,8 @@ export default class YngwieNode {
    *
    */
 
-  // Static Factory Method
+  // STRING -> yngwieNode
+  // Static factory method
   static init(value) {
     return new YngwieNode(value);
   }

@@ -7,6 +7,7 @@ A declarative approach to generating client-side HTML using it's own virtual DOM
 - [API](#api)
   - [Yngwie.Node](#yngwie-node-api)
   - [Yngwie.Element](#yngwie-element-api)
+  - [Yngwie.TextNode](#yngwie-textNode-api)
 
 <a id ="what-is-this" />
 
@@ -73,7 +74,21 @@ It's pretty much a virtual DOM, in that the [YngwieElement](#yngwieElement) clas
     - [renderTo](#renderTo)
     - [inject](#inject)
 
+<a id="yngwie-textNode-api" />
+
 ### Yngwie.TextNode ([YngwieTextNode](#yngwieTextNode))
+
+  - [CONSTRUCTOR](#textNode)
+
+  - **Instance Method**
+    - [text](#textNode_text)
+    - [append](#textNode_append)
+    - [render](#textNode_render)
+    - [clone](#textNode_clone)
+
+  - **Static Method**
+    - [init](#textNode_init)
+
 ### Yngwie.Controller ([YngwieController](#yngwieController))
 ### Yngwie.transform ([YngwieTransfrom](#yngwieTransform))
 ### Yngwie.Error ([YngwieError](#yngwieError))
@@ -701,6 +716,112 @@ Yngwie.Element.inject("#listView", elems);
 ## Yngwie.TextNode (YngwieNode => YngwieTextNode)
 Virtual DOM Text Node that extends [YngwieNode](#yngwieNode) class
 
+### Properties
+
+Property|Type|Description
+--------|----|-----------
+_value | STRING | Text stored in node as STRING
+
+<a id="textNode" />
+
+### CONSTRUCTOR :: STRING -> yngwieTextNode
+Creates instance of YngwieTextNode with the given STRING as it's text.
+
+```javascript
+// Create new YngwieTextNode instance with a value of "Hello World!";
+let textNode = new Yngwie.TextNode("Hello World!");
+```
+
+<a id="textNode_text" />
+
+### yngwieTextNode.text :: VOID -> STRING
+Returns text stored in node.
+
+```javascript
+// Create text node:
+let textNode = new Yngwie.TextNode("Hello World!");
+
+// Returns "Hello World!"
+textNode.text();
+```
+<a id="textNode_append" />
+
+### yngwieTextNode.append :: STRING|yngwieTextNode -> this
+Chainable method that appends STRING or stored value of another yngwieTextNode to the text stored in this text node.
+
+```javascript
+// Create some text nodes:
+let a = new Yngwie.TextNode("a");
+let b = new Yngwie.TextNode("b");
+let c = new Yngwie.TextNode("c");
+let d = new Yngwie.TextNode("d");
+
+// Append text nodes:
+a.append(b).append(c);
+
+// Append more nodes and a STRING:
+a.appends([d, "e"]);
+
+// Returns "abcdef"
+a.text();
+```
+
+<a id="textNode_render" />
+
+### yngwieTextNode.render :: VOID -> NODE
+Renders DOM [text node](https://developer.mozilla.org/en-US/docs/Web/API/Text_) from stored value.
+
+```javascript
+// Create some text nodes:
+let a = new Yngwie.TextNode("a");
+let b = new Yngwie.TextNode("b");
+let c = new Yngwie.TextNode("c");
+let d = new Yngwie.TextNode("d");
+
+// Append text nodes:
+a.appends[b,c,d];
+
+// Creates DOM TextNode with a value of "abcd":
+a.render();
+```
+
+<a id="textNode_clone" />
+
+### yngwieTextNode.clone :: VOID -> yngwieTextNode
+Creates clone of this text node.
+
+```javascript
+// Create some text nodes:
+let a = new Yngwie.TextNode("a");
+let b = new Yngwie.TextNode("b");
+let c = new Yngwie.TextNode("c");
+let d = new Yngwie.TextNode("d");
+
+// Append text nodes:
+a.appends[b,c,d];
+
+// Create clone and append more text:
+let clone = a.clone().append("e");
+
+// Returns "abcd":
+a.text()
+
+// Returns "abcde":
+clone.text();
+```
+
+<a id="textNode_init" />
+
+### YngwieTextNode.init :: STRING -> yngwieTextNode
+Static factory method for YngwieTextNode.
+
+```javascript
+// Create some text nodes and return "abcd":
+Yngwie.TextNode.init("a").appends([
+  "b",
+  Yngwie.TextNode.init("c").append("d")
+]).text();
+```
 <a id="yngwieController" />
 
 ## Yngwie.Controller (YngwieController)
@@ -709,7 +830,7 @@ Binds event handlers for a specific event to an instance of YngwieElement
 <a id="yngwieTransform" />
 
 ## Yngwie.Transform (YngwieTransform)
-Defines transformations between instances of STRING, NODE, and yngwieElement
+Defines transformations between instances of STRING, NODE, and YNGWIE
 
 <a id="yngwieError" />
 

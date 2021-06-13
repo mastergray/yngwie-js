@@ -116,6 +116,12 @@ export default class YngwieTransform {
 
 }
 
+/**
+ *
+ *  Local Functions
+ *
+ */
+
 // :: NODE, NODE, node.nodeType -> VOID
 // Creates an instance of YngwieElement from the given node and all of it's desendents:
 // NOTE: Inspired by Crockford's DOM walking algorithm from "Javascript:The Good Parts"
