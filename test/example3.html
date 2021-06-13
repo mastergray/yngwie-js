@@ -162,26 +162,17 @@
   <script src="./yngwie.js"></script>
   <script>
     let myPage = document.querySelector("#my-page");
-    let yngwie = Yngwie.Transform.init(myPage);
-    let items = yngwie.getElementsByAttribute("data-list-item");
-    items.forEach((item) => {
-      let itemTextNode = item._first;
-      itemTextNode.detach();
-      item.text(itemTextNode.text());
-      item.on("click", function (evt, item, node) {
-        if (item.hasAttribute("data-list-item")) {
-          item.removeAttribute("data-list-item");
-          item.removeText();
-          Yngwie.Element.inject(node, item);
-        }
-        console.log(node);
-      })
-    })
-    myPage.replaceWith(yngwie.render());
+    let toSTRING = (val) => Yngwie.Transform.toSTRING(val);
+    let toYNGWIE = (val) => Yngwie.Transform.toYNGWIE(val);
+    let asString = toSTRING(myPage);
+    let asYngwie = toYNGWIE(asString)
+    let textNode = Yngwie.TextNode.init("hello world!");
+    let elem = Yngwie.Element.init("DIV").text("Goodbye world");
+    //console.log(new Yngwie.TextNode("hey"));
+    console.log(toSTRING(textNode));
     /*let test = yngwie.parse((node, result) => {
       result.push(node._value);
       return result;
     }, []);*/
-    console.log(items);
   </script>
 </body>

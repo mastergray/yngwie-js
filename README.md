@@ -60,7 +60,7 @@ It's pretty much a virtual DOM, in that the [YngwieElement](#yngwieElement) clas
     - [text](#text)
     - [removeText](#removeText)
     - [getElementsBy](#getElementsBy)
-    - [getElementsByTagname](#getElementsByTagname)
+    - [getElementsByTagName](#getElementsByTagName)
     - [getElementsByAttribute](#getElementsByAttribute)
     - [getElementsByClass](#getElementsByClass)
     - [getElementByID](#getElementByID)
@@ -484,7 +484,7 @@ result.parse((elem, result) => result.concat([elem.getAttribute("id")]), []);
 
 <a id="getElementsByTagname" />
 
-### yngwieElement.getElementsByTagname :: STRING -> [yngwieElement]
+### yngwieElement.getElementsByTagName :: STRING -> [yngwieElement]
 Returns all the elements that have the given tag name from this element and it's descendants. If no elements have the given tag name, then an empty array is returned.
 
 ```javascript
@@ -498,7 +498,7 @@ let d = new Yngwie.Element("SPAN");
 a.appends([b,c,d]);
 
 // Returns [c,d]
-a.getElementsByTagname("SPAN");
+a.getElementsByTagName("SPAN");
 
 ```
 
@@ -708,8 +708,8 @@ Binds event handlers for a specific event to an instance of YngwieElement
 
 <a id="yngwieTransform" />
 
-## Yngwie.transform (YngwieTransform)
-Method for transforming a STRING of HTML or a DOM [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) into an instance of YngwieElement.
+## Yngwie.Transform (YngwieTransform)
+Defines transformations between instances of STRING, NODE, and yngwieElement
 
 <a id="yngwieError" />
 

@@ -44,7 +44,7 @@ export default class YngwieTextNode extends YngwieNode {
 
   // :: STRING -> yngwieTextNode
   // Static factory method:
-  init(text) {
+  static init(text) {
     return new YngwieTextNode(text);
   }
 
