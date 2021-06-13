@@ -4,12 +4,16 @@ export default class YngwieNode {
 
   // CONSTRUCTOR :: STRING -> yngwieNode
   constructor(value) {
-    this._value = value;       // Arbitrary STRING value that can be stored by this node
-    this._parent = undefined;  // Parent of this node
-    this._first = undefined;   // First child of this node
-    this._last = undefined;    // Last child of this node;
-    this._next = undefined;    // Next sibling of this node
-    this._prev = undefined;    // Previous sibling of the node
+    if (typeof(value) === "string") {
+      this._value = value;       // Arbitrary STRING value that can be stored by this node
+      this._parent = undefined;  // Parent of this node
+      this._first = undefined;   // First child of this node
+      this._last = undefined;    // Last child of this node;
+      this._next = undefined;    // Next sibling of this node
+      this._prev = undefined;    // Previous sibling of the node
+    } else {
+      throw new YngwieError("Value of YngwieNode must be STRING", value);
+    }
   }
 
   // :: VOID -> [yngwieNode]

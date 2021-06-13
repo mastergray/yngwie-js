@@ -31,3 +31,8 @@ Thumbs.db
 
 # Node Modules #
 node_modules/
+
+# Temp and test files
+temp.txt
+test.json
+test.js

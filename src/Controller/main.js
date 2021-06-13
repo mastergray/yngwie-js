@@ -6,7 +6,7 @@ export default class YngwieController {
     this._fns = fns || [];
   }
 
-  // :: (EVT -> VOID) -> this;
+  // :: (EVT, yngwieElement, NODE -> VOID) -> this;
   // Adds function to listener:
   add(fn) {
     this._fns.push(fn);
@@ -23,16 +23,18 @@ export default class YngwieController {
     return new YngwieController(evtName, fns);
   }
 
-  // :: DOMElement -> DOMElement
+  // ::yngwieElement, DOMElement -> DOMElement
   // Creates event listener and binds it given DOMElement
-  render(node) {
+  render(elem, node) {
     return this._fns.reduce((node, fn) => {
-      node.addEventListener(this._evtName, fn);
+      node.addEventListener(this._evtName, evt => {
+        fn(evt, elem, node);
+      });
       return node;
     }, node);
   }
 
-  // :: STRING, [EVENT -> VOID]|EVENT -> VOID -> yngwieController
+  // :: STRING, [EVENT, yngwieElement, NODE -> VOID]|EVENT, yngwieElement, NODE -> VOID -> yngwieController
   // Static factory method:
   static init(evtName, fns) {
     return new YngwieController(evtName, Array.isArray(fns) === true ? fns : [fns]);

@@ -6,21 +6,30 @@ export default class YngwieElement extends YngwieNode {
 
   // CONSTRUCTOR :: STRING. OBJECT, STRING, [yngwieController] -> this
   constructor(tagname, attribs, text, controllers) {
-    super(tagname);
-    this._attribs = attribs || {};                   // Element Attributes
-    this._text = text === undefined ? null : text;   // Element text that's appended as first child of this element
-    this._controllers = [];                          // Controllers bound to this element
+    super(tagname.toUpperCase());     // Stores tagname in ALL CAPS
+    this._attribs = attribs || {};     // Element Attributes
+    this._text = text;                 // Element text that's appended as first child of this element
+    this._controllers = [];            // Controllers bound to this element
   }
 
-  // :: OBJECT|UNDEFINED -> this|OBJECT
+  // :: VOID -> STRING
+  // Returns tagname of this element:
+  tagname() {
+    return this._value;
+  }
+
+  // :: OBJECT|VOID -> this|OBJECT
   // Sets "attribs" OBJECT with given OBJECT:
   // NOTE: If no argument is given, set attributes are returned:
   attribs(attribs) {
     if (attribs === undefined) {
       return this._attribs;
     } else {
-      this._attribs = attribs;
-      return this;
+      if (typeof(attribs) === "object") {
+        this._attribs = attribs;
+        return this;
+      }
+      throw new YngwieError("YngwieElement attributes can only be set with OBJECT", attribs);
     }
   }
 
@@ -30,62 +39,82 @@ export default class YngwieElement extends YngwieNode {
     return this._attribs.hasOwnProperty(name);
   }
 
-  // :: STRING -> STRING|UNDEFINED
+  // :: STRING -> *|UNDEFINED
   // Returns value of attribute by name stored in "attribs" OBJECT, otherwise returns UNDEFINED
   getAttribute(name) {
     return this._attribs[name];
   }
 
-  // :: STRING, STRING -> this
-  // Binds STRING value to "attribs" OBJECT with given name:
+  // :: STRING, * -> this
+  // Binds  value to "attribs" OBJECT with given name:
   setAttribute(name, value) {
     this._attribs[name] = value;
     return this;
   }
 
-  // :: STRING|UNDEFINED -> this|UNDEFINED
+  // :: STRING -> this
+  // Remove attribute with given name from "attribs" OBJECT:
+  removeAttribute(name) {
+    delete this._attribs[name];
+    return this;
+  }
+
+  // :: STRING|VOID -> this|UNDEFINED
   // Appends text node as first child of element at render with given string as it's value:
   // NOTE: If no argument is given, set text is returned:
-  // NOTE: To unset next, set to NULL:
   text(str) {
     if (str === undefined) {
       return this._text;
     } else {
-      this._text = str;
-      return this;
+      if (typeof(str) === "string") {
+        this._text = str;
+        return this;
+      }
+      throw new YngwieError("Text of element can only be set with a STRING", str);
     }
+  }
+
+  // :: VOID -> this
+  // Sets text as UNDEFINED for this element:
+  removeText() {
+    this._text = undefined;
+    return this;
+  }
+
+  // :: (yngwieElement -> BOOLEAN) -> [yngwieElement]
+  // Returns all the elements that, when the given function is applied to this elements and it's desendants, that function returns TRUE:
+  getElementsBy(fn) {
+    return this.parse((result, node) => {
+      if (node instanceof YngwieElement) {
+        if (fn(node) === true) {
+          result.push(node);
+        }
+      }
+      return result;
+    }, []);
   }
 
   // :: STRING -> [yngwieElement]
   // Returns an array of YngwieElemnts that have the given tagname:
   // NOTE: Returns an empty array if no elements are found with the given tag name:
   getElementsByTagName(tagname) {
-    return this.parse((result, node) => {
-      if (node._value === tagname) {
-        result.push(node);
-      }
-    return result;
-    }, []);
+    return this.getElementsBy(elem => elem.tagname() === tagname);
   }
 
-  // STRING, STRING|UNDEFINED -> [yngwieElement]
+  // STRING, STRING|VOID -> [yngwieElement]
   // Returns an array of yngwieElements that have the given attribute with the given value:
   // NOTE: If no value is given, then any element that has the given attribute name is returned
   getElementsByAttribute(name, value) {
-    return this.parse((node, result) => {
-      if (node instanceof YngwieElement) {
-        if (node.hasAttribute(name)) {
-          if (value === undefined) {
-            result.push(node);
-          } else {
-            if (node.getAttribute(name) === value) {
-              result.push(node);
-            }
-          }
+    return this.getElementsBy(elem => {
+      if (elem.hasAttribute(name)) {
+        if (value === undefined) {
+          return true;
+        } else {
+          return elem.getAttribute(name) === value;
         }
       }
-      return result;
-    }, []);
+      return false;
+    });
   }
 
   // STRING -> [yngwieElement]
@@ -154,7 +183,7 @@ export default class YngwieElement extends YngwieNode {
 
     // Bind Controllers:
     elem = this._controllers.reduce((elem, controller) => {
-      return controller.render(elem);
+      return controller.render(this, elem);
     }, elem);
 
     // If set, create and append text node:
@@ -185,7 +214,6 @@ export default class YngwieElement extends YngwieNode {
 
   }
 
-
   /**
    *
    *  Static Methods
@@ -193,7 +221,7 @@ export default class YngwieElement extends YngwieNode {
    */
 
   // :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
-  // static factory method:
+  // Static factory method:
   static init(tagname, attribs, text, controllers) {
     return new YngwieElement(tagname, attribs, text, controllers)
   }
@@ -202,16 +230,19 @@ export default class YngwieElement extends YngwieNode {
   // Renders an array of yngwieElements and appends result to given target:
   // NOTE: DOMElement of target is returned
   static renderTo(target, elems) {
-    let node = typeof(target) === "string"
-      ? document.querySelector(target)
-      : target;
-    return elems.reduce((result, elem) => {
-      if (elem instanceof YngwieElement) {
-        elem.render(result);
-        return result;
-      }
-      throw new YngwieError("Only YngwieElement can be rendered to target", elem);
-    }, node);
+    if (elems instanceof Array) {
+      let node = typeof(target) === "string"
+        ? document.querySelector(target)
+        : target;
+      return elems.reduce((result, elem) => {
+        if (elem instanceof YngwieElement) {
+          elem.render(result);
+          return result;
+        }
+        throw new YngwieError("Only YngwieElement can be rendered to target", elem);
+      }, node);
+    }
+    throw new YngwieError("Expected array as argument", elems);
   }
 
   // :: STRING|DOMElement, yngwieElement -> DOMElement
