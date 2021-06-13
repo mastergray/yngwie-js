@@ -54,7 +54,7 @@
   }
 
   footer {
-    position:absolute;
+    position:fixed;
     bottom:0px;
     background:#666;
     color:#fff;
@@ -111,7 +111,16 @@
           link("Link 2"),
           link("Link 3"),
           link("Link 4")
-        ])
+        ]),
+        Yngwie.Element.init("input", {
+          "value":"Remove Items",
+          "type":"button"
+        }).on("click", (evt, elem, node) => {
+          elem._prev.getElementsByTagName("A").forEach(elem=>{
+            elem.detach();
+          });
+          Yngwie.Element.inject(node.previousSibling, elem._prev);
+        })
       ]),
       pageContent().appends([
         article("Article 1", `

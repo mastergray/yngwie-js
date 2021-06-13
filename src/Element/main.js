@@ -5,16 +5,16 @@ import YngwieError from "../Error/main.js";
 export default class YngwieElement extends YngwieNode {
 
   // CONSTRUCTOR :: STRING. OBJECT, STRING, [yngwieController] -> this
-  constructor(tagname, attribs, text, controllers) {
-    super(tagname.toUpperCase());     // Stores tagname in ALL CAPS
+  constructor(tagName, attribs, text, controllers) {
+    super(tagName.toUpperCase());     // Stores tagName in ALL CAPS
     this._attribs = attribs || {};     // Element Attributes
     this._text = text;                 // Element text that's appended as first child of this element
     this._controllers = [];            // Controllers bound to this element
   }
 
   // :: VOID -> STRING
-  // Returns tagname of this element:
-  tagname() {
+  // Returns tagName of this element:
+  tagName() {
     return this._value;
   }
 
@@ -84,7 +84,7 @@ export default class YngwieElement extends YngwieNode {
   // :: (yngwieElement -> BOOLEAN) -> [yngwieElement]
   // Returns all the elements that, when the given function is applied to this elements and it's desendants, that function returns TRUE:
   getElementsBy(fn) {
-    return this.parse((result, node) => {
+    return this.parse((node, result) => {
       if (node instanceof YngwieElement) {
         if (fn(node) === true) {
           result.push(node);
@@ -95,10 +95,10 @@ export default class YngwieElement extends YngwieNode {
   }
 
   // :: STRING -> [yngwieElement]
-  // Returns an array of YngwieElemnts that have the given tagname:
+  // Returns an array of YngwieElemnts that have the given tagName:
   // NOTE: Returns an empty array if no elements are found with the given tag name:
-  getElementsByTagName(tagname) {
-    return this.getElementsBy(elem => elem.tagname() === tagname);
+  getElementsByTagName(tagName) {
+    return this.getElementsBy(elem => elem.tagName() === tagName);
   }
 
   // STRING, STRING|VOID -> [yngwieElement]
@@ -143,7 +143,7 @@ export default class YngwieElement extends YngwieNode {
   clone() {
 
     // Copy tagname:
-    let tagname = `${this._value}`;
+    let tagName = `${this._value}`;
 
     // Copy attributes:
     let attribs = Object.keys(this._attribs).reduce((result, id) => {
@@ -162,7 +162,7 @@ export default class YngwieElement extends YngwieNode {
     });
 
     // Copy children and return element:
-    let elem = new YngwieElement(tagname, attribs, text, controllers);
+    let elem = new YngwieElement(tagName, attribs, text, controllers);
     return this.children().reduce((elem, child) => {
       child = child.clone();
       return elem.append(child);
@@ -222,8 +222,8 @@ export default class YngwieElement extends YngwieNode {
 
   // :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
   // Static factory method:
-  static init(tagname, attribs, text, controllers) {
-    return new YngwieElement(tagname, attribs, text, controllers)
+  static init(tagName, attribs, text, controllers) {
+    return new YngwieElement(tagName, attribs, text, controllers)
   }
 
   // :: STRING|DOMElement, [yngwieElement] -> DOMElement

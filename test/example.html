@@ -51,7 +51,7 @@
     footer {
       background:#333;
       color:#fff;
-      position: absolute;
+      position: fixed;
       bottom:0px;
       width:100%;
       border-top:4px solid #000;
@@ -165,8 +165,16 @@
     let yngwie = Yngwie.transform(myPage);
     let items = yngwie.getElementsByAttribute("data-list-item");
     items.forEach((item) => {
-      item.on("click", function (evt) {
-        alert(item.getAttribute("data-list-item"))
+      let itemTextNode = item._first;
+      itemTextNode.detach();
+      item.text(itemTextNode.text());
+      item.on("click", function (evt, item, node) {
+        if (item.hasAttribute("data-list-item")) {
+          item.removeAttribute("data-list-item");
+          item.removeText();
+          Yngwie.Element.inject(node, item);
+        }
+        console.log(node);
       })
     })
     myPage.replaceWith(yngwie.render());

@@ -8,6 +8,12 @@ export default class YngwieTextNode extends YngwieNode {
     super(text);
   }
 
+  // :: VOID -> STRING
+  // Returns text of this text node:
+  text() {
+    return this._value;
+  }
+
   //:: VOID -> DOMTextNode
   // Creates  DOM Text node set with the STRING stored in _value:
   render() {
