@@ -168,7 +168,7 @@
       let itemTextNode = item._first;
       itemTextNode.detach();
       item.text(itemTextNode.text());
-      item.on("click", function (evt, item, node) {
+      item.on("click", (evt, node) => {
         if (item.hasAttribute("data-list-item")) {
           item.removeAttribute("data-list-item");
           item.removeText();
@@ -182,6 +182,5 @@
       result.push(node._value);
       return result;
     }, []);*/
-    console.log(items);
   </script>
 </body>

@@ -4,7 +4,7 @@ import YngwieError from "../Error/main.js";
 
 export default class YngwieElement extends YngwieNode {
 
-  // CONSTRUCTOR :: STRING. OBJECT, STRING, [yngwieController] -> this
+  // CONSTRUCTOR :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
   constructor(tagName, attribs, text, controllers) {
     super(tagName.toUpperCase());     // Stores tagName in ALL CAPS
     this._attribs = attribs || {};     // Element Attributes
@@ -130,10 +130,11 @@ export default class YngwieElement extends YngwieNode {
     return this.getElementsByAttribute("id", id).pop();
   }
 
-  // :: STRING, [(EVENT) -> VOID]|(EVENT) -> VOID ->  this
+  // :: STRING, [(EVENT, ELEMENT) -> VOID]|(EVENT, ELEMENT) -> VOID ->  this
   // Binds controller by event name to node at render:
+  // NOTE: Function bound to controller is called in the context of this element
   on(evtName, fns) {
-    let controller = YngwieController.init(evtName, fns);
+    let controller = Yngwie.Controller.init(evtName, fns);
     this._controllers.push(controller);
     return this;
   }
@@ -170,25 +171,29 @@ export default class YngwieElement extends YngwieNode {
 
   }
 
-  // :: STRING|DOMElement -> DOMElement
-  // Transforms YngwieElement and it's desendants into browser a DOMElement:
-  // NOTE: Optional arugment determines where to append render to, otherwise reender is returned;
-  render(target) {
+  // :: STRING|ELEMENT, OBJECT -> ELEMENT
+  // Transforms this element and it's desendants into a DOM ELEMENT, appending result to given target
+  // and rendering that ELEMENT in the context of the given OBJECT. If no target to append is given,
+  // the rendered ELEMENT is returned. If no context is given, then DOCUMENT is used by default.
+  render(target, ctx) {
+
+    // Check if default context of DOCUMENT should be used:
+    let context = ctx === undefined ? document : ctx;
 
     // Intialize DOMElement:
     let elem = Object.keys(this._attribs).reduce((elem, id) => {
       elem.setAttribute(id, this._attribs[id]);
       return elem;
-    }, document.createElement(this._value));
+    }, context.createElement(this._value));
 
     // Bind Controllers:
     elem = this._controllers.reduce((elem, controller) => {
-      return controller.render(this, elem);
+      return controller.render(elem, this);
     }, elem);
 
     // If set, create and append text node:
     if (typeof(this._text) === "string") {
-      let elemText = document.createTextNode(this._text);
+      let elemText = context.createTextNode(this._text);
       elem.appendChild(elemText);
     }
 
@@ -203,7 +208,7 @@ export default class YngwieElement extends YngwieNode {
     if (target !== undefined) {
       // If target is string, find node using query selector:
       if (typeof(target) === "string") {
-        document.querySelector(target).appendChild(result);
+        context.querySelector(target).appendChild(result);
       } else {
         // Otherise assume that target is DOMElement:
         target.appendChild(result);
@@ -226,13 +231,14 @@ export default class YngwieElement extends YngwieNode {
     return new YngwieElement(tagName, attribs, text, controllers)
   }
 
-  // :: STRING|DOMElement, [yngwieElement] -> DOMElement
-  // Renders an array of yngwieElements and appends result to given target:
-  // NOTE: DOMElement of target is returned
-  static renderTo(target, elems) {
+  // :: STRING|ELEMENT, [yngwieElement], OBJECT -> ELEMENT
+  // Renders an array of yngwieElements in the given context and appends result to given target:
+  // NOTE: ELEMENT of target is returned
+  static renderTo(target, elems, ctx) {
+    let context = ctx === undefined ? document : ctx;
     if (elems instanceof Array) {
       let node = typeof(target) === "string"
-        ? document.querySelector(target)
+        ? context.querySelector(target)
         : target;
       return elems.reduce((result, elem) => {
         if (elem instanceof YngwieElement) {
@@ -245,12 +251,13 @@ export default class YngwieElement extends YngwieNode {
     throw new YngwieError("Expected array as argument", elems);
   }
 
-  // :: STRING|DOMElement, yngwieElement -> DOMElement
-  // Replaces the given target with the render of the given instance  of YngwieElement:
-  static inject(target, elem) {
+  // :: STRING|ELEMENT, yngwieElement, OBJECT -> ELEMENT
+  // Replaces the given target with the render of the given instance  of YngwieElement in the given context:
+  static inject(target, elem, ctx) {
     if (elem instanceof YngwieElement) {
+      let context = ctx === undefined ? document : ctx;
       let node = typeof(target) === "string"
-        ? document.querySelector(target)
+        ? context.querySelector(target)
         : target;
       let result = elem.render();
       node.replaceWith(result);

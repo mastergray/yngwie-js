@@ -115,11 +115,11 @@
         Yngwie.Element.init("input", {
           "value":"Remove Items",
           "type":"button"
-        }).on("click", (evt, elem, node) => {
-          elem._prev.getElementsByTagName("A").forEach(elem=>{
+        }).on("click", function (evt, node) {
+          this._prev.getElementsByTagName("A").forEach(elem=>{
             elem.detach();
           });
-          Yngwie.Element.inject(node.previousSibling, elem._prev);
+          Yngwie.Element.inject(node.previousSibling, this._prev);
         })
       ]),
       pageContent().appends([

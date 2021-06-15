@@ -31,10 +31,18 @@ export default class YngwieTextNode extends YngwieNode {
     throw new YngwieError("Only STRINGs and other YngwieTextNodes can append a YngwieTextNode", val);
   }
 
-  //:: VOID -> DOMTextNode
-  // Creates  DOM Text node set with the STRING stored in _value:
-  render() {
-    return document.createTextNode(this._value);
+  //:: STRING|ELEMENT|VOID, OBJECT -> TEXT
+  // Creates DOM Text node set with the STRING stored in _value:
+  render(target, ctx) {
+    let context = ctx === undefined ? document : ctx;
+    let textNode = context.createTextNode(this._value);
+    if (target !== undefined) {
+      let node = typeof(target) === "string"
+        ? context.querySelector(target)
+        : target;
+      target.appendChild(textNode);
+    }
+    return textNode;
   }
 
   // :: VOID -> yngwieTextNode

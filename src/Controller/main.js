@@ -1,12 +1,12 @@
 export default class YngwieController {
 
-  // CONSTRUCTOR :: STRING, [(EVT -> VOID)] -> this
+  // CONSTRUCTOR :: STRING, [(EVENT, ELEMENT -> VOID)] -> yngwieController
   constructor(evtName, fns) {
     this._evtName = evtName;
     this._fns = fns || [];
   }
 
-  // :: (EVT, yngwieElement, NODE -> VOID) -> this;
+  // :: (EVENT, ELEMENT -> VOID) -> this;
   // Adds function to listener:
   add(fn) {
     this._fns.push(fn);
@@ -23,21 +23,24 @@ export default class YngwieController {
     return new YngwieController(evtName, fns);
   }
 
-  // ::yngwieElement, DOMElement -> DOMElement
-  // Creates event listener and binds it given DOMElement
-  render(elem, node) {
-    return this._fns.reduce((node, fn) => {
-      node.addEventListener(this._evtName, evt => {
-        fn(evt, elem, node);
+  // :: ELEMENT, OBJECT -> ELEMENT
+  // Creates event listener and binds it to given DOM ELEMENT, and calls function of listener to given context
+  // NOTE: If no context is given, function is called in the context of the ELEMENT the listener is bound to
+  render(elem, ctx) {
+    return this._fns.reduce((elem, fn) => {
+      elem.addEventListener(this._evtName, function (evt) {
+        fn.call(ctx === undefined ? elem : ctx, evt, elem);
       });
-      return node;
-    }, node);
+      return elem;
+    }, elem);
   }
 
-  // :: STRING, [EVENT, yngwieElement, NODE -> VOID]|EVENT, yngwieElement, NODE -> VOID -> yngwieController
+  // :: STRING, [(EVENT, ELEMENT -> VOID)]|(EVENT, ELEMENT -> VOID) -> yngwieController
   // Static factory method:
   static init(evtName, fns) {
-    return new YngwieController(evtName, Array.isArray(fns) === true ? fns : [fns]);
+    return fns !== undefined
+      ? new YngwieController(evtName, Array.isArray(fns) === true ? fns : [fns])
+      : new YngwieController(evtName);
   }
 
 }
