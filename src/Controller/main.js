@@ -18,7 +18,7 @@ export default class YngwieController {
   clone() {
     let evtName = `${this._evtName}`;
     let fns = this._fns.map(fn=>{
-      return fn.toString();
+      return new Function("evt", "elem", fn.toString());
     });
     return new YngwieController(evtName, fns);
   }
