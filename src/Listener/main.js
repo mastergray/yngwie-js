@@ -1,6 +1,6 @@
-export default class YngwieController {
+export default class YngwieListener {
 
-  // CONSTRUCTOR :: STRING, [(EVENT, ELEMENT -> VOID)] -> yngwieController
+  // CONSTRUCTOR :: STRING, [(EVENT, ELEMENT -> VOID)] -> yngwieListener
   constructor(evtName, fns) {
     this._evtName = evtName;
     this._fns = fns || [];
@@ -13,14 +13,14 @@ export default class YngwieController {
     return this;
   }
 
-  // :: VOID -> yngwieController
-  // Creates clone of this yngwieController:
+  // :: VOID -> yngwieListener
+  // Creates clone of this yngwieListener:
   clone() {
     let evtName = `${this._evtName}`;
     let fns = this._fns.map(fn=>{
       return new Function("evt", "elem", fn.toString());
     });
-    return new YngwieController(evtName, fns);
+    return new YngwieListener(evtName, fns);
   }
 
   // :: ELEMENT, OBJECT -> ELEMENT
@@ -35,12 +35,12 @@ export default class YngwieController {
     }, elem);
   }
 
-  // :: STRING, [(EVENT, ELEMENT -> VOID)]|(EVENT, ELEMENT -> VOID) -> yngwieController
+  // :: STRING, [(EVENT, ELEMENT -> VOID)]|(EVENT, ELEMENT -> VOID) -> yngwieListener
   // Static factory method:
   static init(evtName, fns) {
     return fns !== undefined
-      ? new YngwieController(evtName, Array.isArray(fns) === true ? fns : [fns])
-      : new YngwieController(evtName);
+      ? new YngwieListener(evtName, Array.isArray(fns) === true ? fns : [fns])
+      : new YngwieListener(evtName);
   }
 
 }

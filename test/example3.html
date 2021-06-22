@@ -169,5 +169,12 @@
     let textNode = Yngwie.TextNode.init("hello world!");
     textNode.appends([" ", Yngwie.TextNode.init("Goodbye!")]);
     console.log(textNode.text());
+
+    try {
+      let node = new Yngwie.Node(1000);
+    } catch (err) {
+      err.log();
+    }
+
   </script>
 </body>

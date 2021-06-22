@@ -68,7 +68,7 @@ export default class YngwieTransform {
 
   // :: STRING|NODE -> yngwieElement
   // Transforms string of HTML or DOMElement NODE into a yngwieElement
-  // NOTE: This DOES NOT transform event handlers into YngwieController objects:
+  // NOTE: This DOES NOT transform event handlers into YngwieListener objects:
   static init(html) {
     return walkNode(YngwieTransform.getType(html) === "STRING" ? YngwieTransform.toNODE(html) : html);
   }

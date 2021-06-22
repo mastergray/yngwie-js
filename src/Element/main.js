@@ -1,15 +1,15 @@
 import YngwieNode from "../Node/main.js";
-import YngwieController from "../Controller/main.js";
+import YngwieListener from "../Listener/main.js";
 import YngwieError from "../Error/main.js";
 
 export default class YngwieElement extends YngwieNode {
 
-  // CONSTRUCTOR :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
-  constructor(tagName, attribs, text, controllers) {
+  // CONSTRUCTOR :: STRING. OBJECT, STRING, [yngwieListener] -> yngwieElement
+  constructor(tagName, attribs, text, listeners) {
     super(tagName.toUpperCase());     // Stores tagName in ALL CAPS
     this._attribs = attribs || {};     // Element Attributes
     this._text = text;                 // Element text that's appended as first child of this element
-    this._controllers = [];            // Controllers bound to this element
+    this._listeners = [];            // Listeners bound to this element
   }
 
   // :: VOID -> STRING
@@ -131,11 +131,11 @@ export default class YngwieElement extends YngwieNode {
   }
 
   // :: STRING, [(EVENT, ELEMENT) -> VOID]|(EVENT, ELEMENT) -> VOID ->  this
-  // Binds controller by event name to node at render:
-  // NOTE: Function bound to controller is called in the context of this element
+  // Binds listener by event name to node at render:
+  // NOTE: Function bound to listener is called in the context of this element
   on(evtName, fns) {
-    let controller = Yngwie.Controller.init(evtName, fns);
-    this._controllers.push(controller);
+    let listener = Yngwie.Listener.init(evtName, fns);
+    this._listeners.push(listener);
     return this;
   }
 
@@ -157,13 +157,13 @@ export default class YngwieElement extends YngwieNode {
       ? `${this._text}`
       : undefined;
 
-    // Copy controllers:
-    let controllers = this._controllers.map((controller) => {
-      return controller.clone();
+    // Copy listeners:
+    let listeners = this._listeners.map((listener) => {
+      return listener.clone();
     });
 
     // Copy children and return element:
-    let elem = new YngwieElement(tagName, attribs, text, controllers);
+    let elem = new YngwieElement(tagName, attribs, text, listeners);
     return this.children().reduce((elem, child) => {
       child = child.clone();
       return elem.append(child);
@@ -186,9 +186,9 @@ export default class YngwieElement extends YngwieNode {
       return elem;
     }, context.createElement(this._value));
 
-    // Bind Controllers:
-    elem = this._controllers.reduce((elem, controller) => {
-      return controller.render(elem, this);
+    // Bind Listeners:
+    elem = this._listeners.reduce((elem, listener) => {
+      return listener.render(elem, this);
     }, elem);
 
     // If set, create and append text node:
@@ -225,10 +225,10 @@ export default class YngwieElement extends YngwieNode {
    *
    */
 
-  // :: STRING. OBJECT, STRING, [yngwieController] -> yngwieElement
+  // :: STRING. OBJECT, STRING, [yngwieListener] -> yngwieElement
   // Static factory method:
-  static init(tagName, attribs, text, controllers) {
-    return new YngwieElement(tagName, attribs, text, controllers)
+  static init(tagName, attribs, text, listeners) {
+    return new YngwieElement(tagName, attribs, text, listeners)
   }
 
   // :: STRING|ELEMENT, [yngwieElement], OBJECT -> ELEMENT
