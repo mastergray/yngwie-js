@@ -15,6 +15,7 @@
   },
   "author": "mastergray",
   "license": "MIT",
+  "keywords":["Virtual DOM", "Client Side"],
   "bugs": {
     "url": "https://github.com/mastergray/yngwie-js/issues"
   },
