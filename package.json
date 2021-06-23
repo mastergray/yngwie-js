@@ -1,6 +1,6 @@
 {
   "name": "yngwie",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A declarative approach to generating client-side HTML using it's own virtual DOM implementation.",
   "main": "./src/main.js",
   "scripts": {
