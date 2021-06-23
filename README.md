@@ -61,7 +61,7 @@ Yngwie.Transform.toYNGWIE(`
 .render("BODY");
 ```
 
-See some not so great examples [here](https://github.com/mastergray/yngwie-js/tree/main/test). Otherwise, start with the API docs for [Yngiwe.Element](https://github.com/mastergray/yngwie-js/wiki/Yngwie.Element).
+See some not so great examples [here](https://github.com/mastergray/yngwie-js/tree/main/test). Otherwise, the API docs for [Yngiwe.Element](https://github.com/mastergray/yngwie-js/wiki/Yngwie.Element) are a good start.
 
 ## API
 See the full API [here](https://github.com/mastergray/yngwie-js/wiki/API).
