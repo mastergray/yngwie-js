@@ -1,6 +1,6 @@
 {
   "name": "yngwie",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A declarative approach to generating client-side HTML using it's own virtual DOM implementation.",
   "main": "./src/main.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "author": "mastergray",
   "license": "MIT",
-  "keywords":["Virtual DOM", "Client Side"],
+  "keywords":["Virtual DOM", "Client Side", "HTML", "Declarative programming"],
   "bugs": {
     "url": "https://github.com/mastergray/yngwie-js/issues"
   },

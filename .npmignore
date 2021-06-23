@@ -40,3 +40,4 @@ test.js
 #Specific NPM files to ignore:
 dist/
 test/
+configs/
