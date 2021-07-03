@@ -134,7 +134,7 @@ export default class YngwieElement extends YngwieNode {
   // Binds listener by event name to node at render:
   // NOTE: Function bound to listener is called in the context of this element
   on(evtName, fns) {
-    let listener = Yngwie.Listener.init(evtName, fns);
+    let listener = YngwieListener.init(evtName, fns);
     this._listeners.push(listener);
     return this;
   }

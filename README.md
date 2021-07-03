@@ -14,12 +14,12 @@ It's pretty much a virtual DOM, in that the [YngwieElement](https://github.com/m
 Creating elements and rendering them to the `BODY` element of a page:
 
 ```javascript
-Yngwie.renderTo("BODY", [
+Yngwie.Element.renderTo("BODY", [
   Yngwie.Element.init("HEADER").appends([
     Yngwie.Element.init("DIV", {"class":"banner"}, "[Banner]")
     Yngwie.Element.init("NAV").appends([
-      Yngwie.Element.init("A", {"href":"/some/page/link/URL"}, "Link 1")
-      Yngwie.Element.init("A", {"href":"/some/page/link/URL"}, "Link 2")
+      Yngwie.Element.init("A", {"href":"/some/page/link/URL"}, "Link 1"),
+      Yngwie.Element.init("A", {"href":"/some/page/link/URL"}, "Link 2"),
       Yngwie.Element.init("A", {"href":"/some/page/link/URL"}, "Link 3")
     ]);
   ]);
@@ -61,7 +61,7 @@ Yngwie.Transform.toYNGWIE(`
 .render("BODY");
 ```
 
-See some not so great examples [here](https://github.com/mastergray/yngwie-js/tree/main/test). Otherwise, the API docs for [Yngiwe.Element](https://github.com/mastergray/yngwie-js/wiki/Yngwie.Element) are a good start.
+See some not so great examples [here](https://github.com/mastergray/yngwie-js/tree/main/test). Otherwise, the API docs for [Yngiwe.Element](https://github.com/mastergray/yngwie-js/wiki/Yngwie.Element) are a good place to start.
 
 ## API
 See the full API [here](https://github.com/mastergray/yngwie-js/wiki/API).
