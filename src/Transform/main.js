@@ -1,7 +1,7 @@
 import YngwieElement from "../Element/main.js";
 import YngwieTextNode from "../TextNode/main.js";
 import YngwieNode from "../Node/main.js";
-import YngwieError from "../Transform/main.js";
+import YngwieError from "../Error/main.js";
 
 export default class YngwieTransform {
 

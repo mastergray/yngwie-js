@@ -1,13 +1,14 @@
 {
   "name": "yngwie",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A declarative approach to generating client-side HTML using it's own virtual DOM implementation.",
   "main": "./src/main.js",
   "scripts": {
     "test": "run-p watch server",
     "server": "npx browser-sync start -c ./configs/bs.js",
     "watch": "npx webpack -c ./configs/dev.js --watch",
-    "build": "npx webpack -c ./configs/prod.js"
+    "build": "npx webpack -c ./configs/prod.js",
+    "build-common":"npx webpack -c ./configs/common.js"
   },
   "repository": {
     "type": "git",

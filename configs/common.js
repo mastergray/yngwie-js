@@ -6,10 +6,9 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'yngwie.js',
+    filename: 'yngwie.commonjs.js',
     library:{
-      name:"Yngwie",
-      type:"commonjs"
+      type:"commonjs2"
     }
   }
 };
